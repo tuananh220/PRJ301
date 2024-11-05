@@ -47,20 +47,20 @@ public class PlanDBContext extends DBContext<Plan> {
                     + "           ,?)";
             
             PreparedStatement stm_insert_plan = connection.prepareStatement(sql_insert_plan);
-            stm_insert_plan.setDate(1, model.getStart());
-            stm_insert_plan.setDate(2, model.getEnd());
-            stm_insert_plan.setInt(3, model.getDept().getId());
+            stm_insert_plan.setDate(1, model.getStartd());
+            stm_insert_plan.setDate(2, model.getEndd());
+            stm_insert_plan.setInt(3, model.getDepartment().getId());
             stm_insert_plan.executeUpdate();
             
             PreparedStatement stm_select_plan = connection.prepareStatement(sql_select_plan);
             ResultSet rs = stm_select_plan.executeQuery();
             if(rs.next())
             {
-                model.setId(rs.getInt("plid"));
+                model.setPlid(rs.getInt("plid"));
             }
             for (PlanCampain campain : model.getCampains()) {
                 PreparedStatement stm_insert_campain = connection.prepareStatement(sql_insert_campain);
-                stm_insert_campain.setInt(1, model.getId());
+                stm_insert_campain.setInt(1, model.getPlid());
                 stm_insert_campain.setInt(2, campain.getProduct().getId());
                 stm_insert_campain.setInt(3, campain.getQuantity());
                 stm_insert_campain.setFloat(4, campain.getEstimatedeffort());

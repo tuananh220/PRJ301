@@ -4,17 +4,18 @@ public class Employee {
     private String eid;
     private String ename;
     private String salaryLevel;
+    private String hourlyRate;
     private int did;
     private String createdby;
 
     public Employee() {
     }
 
-    // Constructor
-    public Employee(String eid, String ename, String salaryLevel, int did, String createdby) {
+    public Employee(String eid, String ename, String salaryLevel, String hourlyRate, int did, String createdby) {
         this.eid = eid;
         this.ename = ename;
         this.salaryLevel = salaryLevel;
+        this.hourlyRate = hourlyRate;
         this.did = did;
         this.createdby = createdby;
     }
@@ -50,6 +51,14 @@ public class Employee {
 
     public void setDid(int did) {
         this.did = did;
+    }
+
+    public String getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(String hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
     public String getCreatedby() {

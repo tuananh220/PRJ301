@@ -52,9 +52,8 @@
         <h2>Chức Năng Quản Lý Của Giám Đốc</h2>
         <select id="functionSelect">
             <option value="#">Chọn một chức năng</option>
-            <option value="<%= request.getContextPath() %>/employees/list">Quản Lý Nhân Viên</option>
-            <option value="<%= request.getContextPath() %>/product/list">Quản Lý Sản Phẩm</option>
-            <option value="<%= request.getContextPath() %>/productionplan/create">Quản Lý Kế Hoạch</option>
+            <option value="<%= request.getContextPath() %>/attendancedetail">Quản Lý Nhân Viên</option>
+            <option value="<%= request.getContextPath() %>/create">Quản Lý Kế Hoạch</option>
             <option value="<%= request.getContextPath() %>/report/list">Quản Lý Báo Cáo</option>
         </select>
         <button class="btn-confirm" onclick="redirectToPage()">Xác Nhận</button>

@@ -21,7 +21,7 @@ import model.Product;
 import model.Department;
 
 
-public class PlanListController extends HttpServlet {
+public class PlanCreateController extends HttpServlet {
    
     
 
@@ -33,7 +33,7 @@ public class PlanListController extends HttpServlet {
         DepartmentDBContext dbDept = new DepartmentDBContext();
         request.setAttribute("products", dbProduct.list());
         request.setAttribute("depts", dbDept.get("workshop"));
-        request.getRequestDispatcher("../view/productionplan/create.jsp").forward(request, response);
+        request.getRequestDispatcher("View/Plan/create.jsp").forward(request, response);
     } 
 
     /** 
@@ -49,13 +49,13 @@ public class PlanListController extends HttpServlet {
         String[] pids = request.getParameterValues("pid");
         
         Plan plan = new Plan();
-        plan.setStart(Date.valueOf(request.getParameter("from")));
-        plan.setEnd(Date.valueOf(request.getParameter("to")));
+        plan.setStartd(Date.valueOf(request.getParameter("from")));
+        plan.setEndd(Date.valueOf(request.getParameter("to")));
         
         Department d = new Department();
         d.setId(Integer.parseInt(request.getParameter("did")));
         
-        plan.setDept(d);
+        plan.setDepartment(d);
         plan.setCampains(new ArrayList<>());
         
         for (String pid : pids) {
