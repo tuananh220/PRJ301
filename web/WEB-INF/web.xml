@@ -16,6 +16,18 @@
         <servlet-name>AttendanceController</servlet-name>
         <servlet-class>controller.attendance.AttendanceController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TakeAttendance</servlet-name>
+        <servlet-class>controller.attendance.TakeAttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PlanListController</servlet-name>
+        <servlet-class>controller.plan.PlanListController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateScheduleController</servlet-name>
+        <servlet-class>controller.planschedule.CreateScheduleController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -29,15 +41,27 @@
         <url-pattern>/LogOut</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>PlanListController</servlet-name>
+        <servlet-name>PlanCreateController</servlet-name>
         <url-pattern>/create</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>PlanListController</servlet-name>
+        <servlet-name>PlanCreateController</servlet-name>
         <servlet-class>controller.plan.PlanCreateController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AttendanceController</servlet-name>
         <url-pattern>/attendancedetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TakeAttendance</servlet-name>
+        <url-pattern>/TakeAttendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlanListController</servlet-name>
+        <url-pattern>/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateScheduleController</servlet-name>
+        <url-pattern>/schedulecreate</url-pattern>
     </servlet-mapping>
 </web-app>

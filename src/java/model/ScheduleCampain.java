@@ -9,11 +9,22 @@ import java.sql.*;
 public class ScheduleCampain {
     private int scid;
     private PlanCampain planCampain;
-    private Date date;
+        private java.sql.Date date;
     private String shift;
     private int quantity;
 
+    public ScheduleCampain() {
+    }
 
+    public ScheduleCampain(int scid, PlanCampain planCampain, Date date, String shift, int quantity) {
+        this.scid = scid;
+        this.planCampain = planCampain;
+        this.date = date;
+        this.shift = shift;
+        this.quantity = quantity;
+    }
+
+    // Getters and setters
     public int getScid() {
         return scid;
     }
@@ -29,6 +40,8 @@ public class ScheduleCampain {
     public void setPlanCampain(PlanCampain planCampain) {
         this.planCampain = planCampain;
     }
+
+    
 
     public Date getDate() {
         return date;
@@ -53,6 +66,4 @@ public class ScheduleCampain {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    
 }

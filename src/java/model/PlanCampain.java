@@ -8,18 +8,18 @@ package model;
 
 
 public class PlanCampain {
-    private int id;
+    private int caid;
     private Plan plan;
     private Product product;
     private int quantity;
     private float estimatedeffort;
-
+    
     public int getId() {
-        return id;
+        return caid;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.caid = id;
     }
 
     public Plan getPlan() {

@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author Minh Duc
@@ -13,14 +15,32 @@ public class Attendance {
     private WorkerSchedule workerSchedule;
     private int quantity;
     private float alpha;
-    String Note;
+    String note;
+    private Product product;
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+   
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public String getNote() {
-        return Note;
+        return note;
     }
 
     public void setNote(String Note) {
-        this.Note = Note;
+        this.note = Note;
     }
 
     public int getAid() {

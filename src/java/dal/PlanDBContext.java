@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.PlanCampain;
@@ -88,7 +89,74 @@ public class PlanDBContext extends DBContext<Plan> {
         }
 
     }
+    
+    public List<Plan> getAllPlans() {
+        List<Plan> plans = new ArrayList<>();
+        String sql = "SELECT pl.plid, pl.startd, pl.endd, " +
+                     "       CASE " +
+                     "           WHEN SUM(ISNULL(ws.quantity, 0)) >= SUM(pc.quantity) THEN 'Complete' " +
+                     "           WHEN MAX(pl.endd) < GETDATE() THEN 'Late' " +
+                     "           ELSE 'On-going' " +
+                     "       END AS status " +
+                     "FROM [Plan] pl " +
+                     "LEFT JOIN PlanCampaign pc ON pl.plid = pc.plid " +
+                     "LEFT JOIN ScheduleCampaign sc ON pc.canid = sc.canid " +
+                     "LEFT JOIN WorkerSchedule ws ON sc.scid = ws.scid " +
+                     "GROUP BY pl.plid, pl.startd, pl.endd";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Plan plan = new Plan();
+                plan.setPlid(resultSet.getInt("plid"));
+                plan.setStartd(resultSet.getDate("startd"));
+                plan.setEndd(resultSet.getDate("endd"));
+                plan.setStatus(resultSet.getString("status"));
+                plans.add(plan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return plans;
+    }
+
+    // Lấy thông tin của kế hoạch theo ID
+    public Plan getPlanById(int plid) {
+        Plan plan = null;
+        String sql = "SELECT pl.plid, pl.startd, pl.endd, " +
+                     "       CASE " +
+                     "           WHEN SUM(ISNULL(ws.quantity, 0)) >= SUM(pc.quantity) THEN 'Complete' " +
+                     "           WHEN MAX(pl.endd) < GETDATE() THEN 'Late' " +
+                     "           ELSE 'On-going' " +
+                     "       END AS status " +
+                     "FROM [Plan] pl " +
+                     "LEFT JOIN PlanCampaign pc ON pl.plid = pc.plid " +
+                     "LEFT JOIN ScheduleCampaign sc ON pc.canid = sc.canid " +
+                     "LEFT JOIN WorkerSchedule ws ON sc.scid = ws.scid " +
+                     "WHERE pl.plid = ? " +
+                     "GROUP BY pl.plid, pl.startd, pl.endd";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, plid);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                plan = new Plan();
+                plan.setPlid(resultSet.getInt("plid"));
+                plan.setStartd(resultSet.getDate("startd"));
+                plan.setEndd(resultSet.getDate("endd"));
+                plan.setStatus(resultSet.getString("status"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return plan;
+    }
+    
     @Override
     public void update(Plan model) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

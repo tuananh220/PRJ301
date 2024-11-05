@@ -31,6 +31,8 @@ public abstract class DBContext<T> {
         }
     }
     
+    
+    
     public abstract void insert(T model);
     public abstract void update(T model);
     public abstract void delete(T model);

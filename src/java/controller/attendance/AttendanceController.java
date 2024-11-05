@@ -4,54 +4,63 @@ import dal.AttendanceDBContext;
 import dal.WorkerScheduleDBContext;
 import model.Attendance;
 import model.WorkerSchedule;
-
+import dal.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import model.ScheduleCampain;
 
 public class AttendanceController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         AttendanceDBContext attendanceDB = new AttendanceDBContext();
+        String selectedDate = request.getParameter("date");
+        String selectedShift = request.getParameter("shift");
+        ArrayList<Attendance> attendances;
 
-        String workshopNo = request.getParameter("workshopNo");
-        String shiftNo = request.getParameter("shiftNo");
+        if (selectedDate != null && selectedShift != null) {
+            attendances = attendanceDB.listWithProducts(java.sql.Date.valueOf(selectedDate), selectedShift);
+        } else {
+            attendances = attendanceDB.listWithProducts();
+        }
 
-        WorkerScheduleDBContext workerScheduleDB = new WorkerScheduleDBContext();
-        List<WorkerSchedule> workerSchedules = workerScheduleDB.listByWorkshopAndShift(workshopNo, shiftNo);
+        // Fetch available dates and shifts from ScheduleCampaign
+        ScheduleCampainDBContext scheduleCampaignDB = new ScheduleCampainDBContext();
+        ArrayList<ScheduleCampain> scheduleCampaigns = scheduleCampaignDB.list();
 
-        request.setAttribute("workerSchedules", workerSchedules);
-        request.setAttribute("workshopNo", workshopNo);
-        request.setAttribute("shiftNo", shiftNo);
+        // Set attributes for JSP
+        request.setAttribute("attendances", attendances);
+        request.setAttribute("scheduleCampaigns", scheduleCampaigns);
 
+        // Forward to JSP
         request.getRequestDispatcher("/View/Attendance/attendanceDetail.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String[] workerScheduleIds = request.getParameterValues("wsid");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AttendanceDBContext attendanceDB = new AttendanceDBContext();
 
-        for (String wsid : workerScheduleIds) {
-            String note = request.getParameter("note" + wsid);
+        // Lấy danh sách attendance để cập nhật note
+        String[] aidList = request.getParameterValues("aid");
+        if (aidList != null) {
+            for (String aidStr : aidList) {
+                int aid = Integer.parseInt(aidStr);
+                String note = request.getParameter("note_" + aid);
 
-            Attendance attendance = new Attendance();
-            WorkerSchedule workerSchedule = new WorkerSchedule();
-            workerSchedule.setWsid(Integer.parseInt(wsid));
-            attendance.setWorkerSchedule(workerSchedule);
-            attendance.setNote(note);
-
-            attendanceDB.updateNote(attendance);
+                Attendance attendance = attendanceDB.get(aid);
+                if (attendance != null) {
+                    attendance.setNote(note);
+                    attendanceDB.update(attendance);
+                }
+            }
         }
 
-        response.sendRedirect(request.getContextPath() + "/attendance?workshopNo=" +
-                request.getParameter("workshopNo") + "&shiftNo=" + request.getParameter("shiftNo"));
+        response.sendRedirect("list");
     }
 }
